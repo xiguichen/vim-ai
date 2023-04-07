@@ -1,5 +1,7 @@
 import sys
 import os
+import requests
+import json
 
 def load_api_key():
     config_file_path = os.path.join(os.path.expanduser("~"), ".config/openai.token")
@@ -55,3 +57,33 @@ def parse_chat_messages(chat_content):
 
     return messages
 
+
+def gpt_chat(chat_content):
+
+    url = "https://chatbot.theb.ai/api/chat-process"
+
+    headers = {
+            "Connection": "keep-alive",
+            "sec-ch-ua": '"Google Chrome";v="111", "Not(A:Brand";v="8", "Chromium";v="111"',
+            "Accept": "application/json, text/plain, */*",
+            "Content-Type": "application/json",
+            "sec-ch-ua-mobile": "?0",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36",
+            "sec-ch-ua-platform": '"Windows"',
+            "Origin": "https://chatbot.theb.ai",
+            "Sec-Fetch-Site": "same-origin",
+            "Sec-Fetch-Mode": "cors",
+            "Sec-Fetch-Dest": "empty",
+            "Referer": "https://chatbot.theb.ai/",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
+    }
+
+    data = {"prompt":"sample code for use python to decode a json content"}
+
+
+    response = requests.post(url, headers=headers, json=data)
+
+    line = response.text.splitlines()[-1]
+    data = json.loads(line)
+    return data['text']

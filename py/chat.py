@@ -1,5 +1,3 @@
-import openai
-
 # import utils
 plugin_root = vim.eval("s:plugin_root")
 vim.command(f"py3file {plugin_root}/py/utils.py")
@@ -7,7 +5,6 @@ vim.command(f"py3file {plugin_root}/py/utils.py")
 options = vim.eval("options")
 request_options = make_request_options()
 
-openai.api_key = load_api_key()
 
 lines = vim.eval('getline(1, "$")')
 contains_user_prompt = any(line == '>>> user' for line in lines)
@@ -32,13 +29,10 @@ try:
         print('Answering...')
         vim.command("redraw")
 
-        response = openai.ChatCompletion.create(messages=messages, stream=True, **request_options)
-        text_chunks = map(lambda resp: resp['choices'][0]['delta'].get('content', ''), response)
+        text_chunks = gpt_chat(''.join(messages))
         render_text_chunks(text_chunks)
 
         vim.command("normal! a\n\n>>> user\n\n")
         vim.command("redraw")
 except KeyboardInterrupt:
     vim.command("normal! a Ctrl-C...")
-except openai.error.Timeout:
-    vim.command("normal! aRequest timeout...")
