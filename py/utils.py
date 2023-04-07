@@ -79,8 +79,7 @@ def gpt_chat(chat_content):
             "Accept-Language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
     }
 
-    data = {"prompt":"sample code for use python to decode a json content"}
-
+    data = {"prompt": chat_content}
 
     response = requests.post(url, headers=headers, json=data)
 

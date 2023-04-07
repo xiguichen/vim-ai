@@ -29,7 +29,7 @@ try:
         print('Answering...')
         vim.command("redraw")
 
-        text_chunks = gpt_chat(''.join(messages))
+        text_chunks = gpt_chat(''.join(messages[-1]["content"].strip()))
         render_text_chunks(text_chunks)
 
         vim.command("normal! a\n\n>>> user\n\n")
